@@ -16,51 +16,6 @@ export default function LoginPage() {
 
   return (
     <div className="relative min-h-screen bg-gray-100 flex items-center justify-center px-4 overflow-hidden">
-      {/* Background SVG Pattern */}
-      <div className="absolute inset-0 -z-10">
-        <svg
-          className="absolute top-0 left-0 w-full h-full opacity-10"
-          xmlns="http://www.w3.org/2000/svg"
-          viewBox="0 0 100 100"
-          preserveAspectRatio="xMidYMid slice"
-        >
-          <defs>
-            <pattern
-              id="grid-pattern"
-              x="0"
-              y="0"
-              width="10"
-              height="10"
-              patternUnits="userSpaceOnUse"
-            >
-              <rect
-                x="0"
-                y="0"
-                width="10"
-                height="10"
-                fill="none"
-                stroke="#229ABD"
-                strokeWidth="0.5"
-              />
-            </pattern>
-          </defs>
-          <rect width="100%" height="100%" fill="url(#grid-pattern)" />
-        </svg>
-
-        {/* Floating SVG Shape */}
-        <svg
-          className="absolute bottom-0 right-0 opacity-20 w-64 h-64 animate-floating"
-          xmlns="http://www.w3.org/2000/svg"
-          viewBox="0 0 200 200"
-        >
-          <path
-            fill="#229ABD"
-            d="M38.7,-49.2C51.4,-40.9,64.1,-28.4,67.1,-14.7C70,0.9,63.2,15.6,56.2,29.5C49.1,43.5,41.7,56.8,30.4,63.8C19.1,70.8,4,71.4,-11.3,67.8C-26.6,64.2,-42.1,56.5,-50.2,44.8C-58.2,33.1,-58.8,17.5,-60.5,1.5C-62.3,-14.5,-65.3,-29,-59.4,-40.5C-53.5,-52,-38.8,-60.6,-24.7,-66.8C-10.6,-73,3,-76.8,13.4,-71.3C23.8,-65.9,31.1,-51.5,38.7,-49.2Z"
-            transform="translate(100 100)"
-          />
-        </svg>
-      </div>
-
       <div
         className="max-w-5xl w-full bg-white rounded-2xl shadow-2xl overflow-hidden flex relative"
         ref={containerRef}
@@ -132,7 +87,7 @@ export default function LoginPage() {
           <p className="mt-6 text-center text-sm text-gray-600 animate-in">
             Don't have an account?{" "}
             <a
-              href="#"
+              href="/auth/signup"
               className="font-medium text-[#229ABD] hover:text-[#126D8F] transition-colors"
             >
               Sign up
