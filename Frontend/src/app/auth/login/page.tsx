@@ -3,19 +3,23 @@
 import { useState } from "react";
 import { useGSAPAnimation } from "../../hooks/useGSAPAnimation.ts";
 import { FaVideo, FaProjectDiagram, FaCode } from "react-icons/fa";
+import { IoEye, IoEyeOff } from "react-icons/io5";
 
 export default function LoginPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
+
   const containerRef = useGSAPAnimation();
 
+  const togglePasswordVisibility = () => setShowPassword((prev) => !prev);
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     console.log("Login attempt with:", email, password);
   };
 
   return (
-    <div className="relative min-h-screen bg-gray-100 flex items-center justify-center px-4 overflow-hidden">
+    <div className="relative min-h-screen bg-gradient-to-r from-indigo-100 to-teal-100 flex items-center justify-center px-4 overflow-hidden">
       <div
         className="max-w-5xl w-full bg-white rounded-2xl shadow-2xl overflow-hidden flex relative"
         ref={containerRef}
@@ -63,15 +67,28 @@ export default function LoginPage() {
                 >
                   Password
                 </label>
-                <input
-                  type="password"
-                  id="password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  className="mt-1 block w-full px-4 py-3 rounded-lg border border-gray-300 shadow-sm focus:outline-none focus:ring-2 focus:ring-[#229ABD] focus:border-[#229ABD] transition"
-                  placeholder="Enter your password"
-                  required
-                />
+                <div className="relative">
+                  <input
+                    type={showPassword ? "text" : "password"}
+                    id="password"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    className="mt-1 block w-full px-4 py-3 rounded-lg border border-gray-300 shadow-sm focus:outline-none focus:ring-2 focus:ring-[#229ABD] focus:border-[#229ABD] transition"
+                    placeholder="Enter your password"
+                    required
+                  />
+                  <button
+                    type="button"
+                    onClick={togglePasswordVisibility}
+                    className="absolute inset-y-0 right-0 flex items-center px-4 text-gray-500 hover:text-gray-700 focus:outline-none"
+                  >
+                    {showPassword ? (
+                      <IoEyeOff size={20} />
+                    ) : (
+                      <IoEye size={20} />
+                    )}
+                  </button>
+                </div>
               </div>
             </div>
 
