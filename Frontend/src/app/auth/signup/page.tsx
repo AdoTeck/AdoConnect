@@ -1,18 +1,21 @@
 "use client";
 
 import { useState } from "react";
-import { useGSAPAnimation } from "../../hooks/useGSAPAnimation.ts";
+import { useGSAPAnimation } from "../../hooks/useGSAPAnimation";
 import { FaVideo, FaProjectDiagram, FaCode } from "react-icons/fa";
-import { IoEye, IoEyeOff } from "react-icons/io5";
+import { FormField, PasswordField } from "../../components/Form/FormFields";
+import { FeatureItem } from "../../components/Icons/FeatureItem";
 
 export default function SignUpPage() {
-  const [userName, setUserName] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
-  const [fullName, setFullName] = useState("");
-  const [phoneNumber, setPhoneNumber] = useState("");
-  
+  const [formData, setFormData] = useState({
+    userName: "",
+    email: "",
+    password: "",
+    confirmPassword: "",
+    fullName: "",
+    phoneNumber: "",
+  });
+
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
@@ -24,14 +27,19 @@ export default function SignUpPage() {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    console.log("Sign-up attempt with:", {
-      userName,
-      email,
-      password,
-      confirmPassword,
-      fullName,
-      phoneNumber,
-    });
+
+    // Basic validation
+    if (formData.password !== formData.confirmPassword) {
+      alert("Passwords do not match!");
+      return;
+    }
+
+    console.log("Sign-up attempt with:", formData);
+  };
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
   return (
@@ -62,49 +70,49 @@ export default function SignUpPage() {
               <FormField
                 label="User Name"
                 type="text"
-                id="userName"
-                value={userName}
-                onChange={(e) => setUserName(e.target.value)}
+                name="userName"
+                value={formData.userName}
+                onChange={handleInputChange}
                 placeholder="Enter your username"
               />
               <FormField
                 label="Full Name"
                 type="text"
-                id="fullName"
-                value={fullName}
-                onChange={(e) => setFullName(e.target.value)}
+                name="fullName"
+                value={formData.fullName}
+                onChange={handleInputChange}
                 placeholder="Enter your full name"
               />
               <FormField
                 label="Email Address"
                 type="email"
-                id="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
+                name="email"
+                value={formData.email}
+                onChange={handleInputChange}
                 placeholder="Enter your email"
               />
               <FormField
                 label="Phone Number"
                 type="tel"
-                id="phoneNumber"
-                value={phoneNumber}
-                onChange={(e) => setPhoneNumber(e.target.value)}
+                name="phoneNumber"
+                value={formData.phoneNumber}
+                onChange={handleInputChange}
                 placeholder="Enter your phone number"
               />
               <PasswordField
                 label="Password"
-                id="password"
-                value={password}
+                name="password"
+                value={formData.password}
                 showPassword={showPassword}
-                onChange={(e) => setPassword(e.target.value)}
+                onChange={handleInputChange}
                 toggleVisibility={togglePasswordVisibility}
               />
               <PasswordField
                 label="Confirm Password"
-                id="confirmPassword"
-                value={confirmPassword}
+                name="confirmPassword"
+                value={formData.confirmPassword}
                 showPassword={showConfirmPassword}
-                onChange={(e) => setConfirmPassword(e.target.value)}
+                onChange={handleInputChange}
                 toggleVisibility={toggleConfirmPasswordVisibility}
               />
             </div>
@@ -127,99 +135,6 @@ export default function SignUpPage() {
               Log in
             </a>
           </p>
-        </div>
-      </div>
-    </div>
-  );
-}
-
-function FeatureItem({
-  icon: Icon,
-  text,
-}: {
-  icon: React.ElementType;
-  text: string;
-}) {
-  return (
-    <div className="flex items-center justify-center space-x-3 text-white animate-in">
-      <Icon className="w-8 h-8" />
-      <span className="text-lg font-medium">{text}</span>
-    </div>
-  );
-}
-
-function FormField({
-  label,
-  type,
-  id,
-  value,
-  onChange,
-  placeholder,
-}: {
-  label: string;
-  type: string;
-  id: string;
-  value: string;
-  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  placeholder: string;
-}) {
-  return (
-    <div className="space-y-2 animate-in">
-      <label htmlFor={id} className="block text-sm font-semibold text-gray-700">
-        {label}
-      </label>
-      <input
-        type={type}
-        id={id}
-        value={value}
-        onChange={onChange}
-        className="mt-1 block w-full px-4 py-3 rounded-lg border border-gray-300 shadow-sm focus:outline-none focus:ring-2 focus:ring-[#229ABD] focus:border-[#229ABD] transition"
-        placeholder={placeholder}
-        required
-      />
-    </div>
-  );
-}
-
-function PasswordField({
-  label,
-  id,
-  value,
-  showPassword,
-  onChange,
-  toggleVisibility,
-}: {
-  label: string;
-  id: string;
-  value: string;
-  showPassword: boolean;
-  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  toggleVisibility: () => void;
-}) {
-  return (
-    <div className="space-y-2 relative animate-in">
-      <label htmlFor={id} className="block text-sm font-semibold text-gray-700">
-        {label}
-      </label>
-      <div className="relative">
-        <input
-          type={showPassword ? "text" : "password"}
-          id={id}
-          value={value}
-          onChange={onChange}
-          className="mt-1 block w-full px-4 py-3 rounded-lg border border-gray-300 shadow-sm focus:outline-none focus:ring-2 focus:ring-[#229ABD] focus:border-[#229ABD] transition"
-          placeholder={`Enter your ${label.toLowerCase()}`}
-          required
-        />
-        <div
-          className="absolute inset-y-0 right-4 flex items-center cursor-pointer"
-          onClick={toggleVisibility}
-        >
-          {showPassword ? (
-            <IoEyeOff className="w-6 h-6 text-gray-500" />
-          ) : (
-            <IoEye className="w-6 h-6 text-gray-500" />
-          )}
         </div>
       </div>
     </div>

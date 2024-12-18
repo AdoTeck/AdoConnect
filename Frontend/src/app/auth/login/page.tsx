@@ -3,7 +3,8 @@
 import { useState } from "react";
 import { useGSAPAnimation } from "../../hooks/useGSAPAnimation.ts";
 import { FaVideo, FaProjectDiagram, FaCode } from "react-icons/fa";
-import { IoEye, IoEyeOff } from "react-icons/io5";
+import { FeatureItem } from "../../components/Icons/FeatureItem.tsx";
+import { FormField, PasswordField } from "../../components/Form/FormFields";
 
 export default function LoginPage() {
   const [email, setEmail] = useState("");
@@ -44,51 +45,24 @@ export default function LoginPage() {
           <form onSubmit={handleSubmit} className="space-y-8">
             <div className="space-y-4">
               <div className="animate-in">
-                <label
-                  htmlFor="email"
-                  className="block text-sm font-semibold text-gray-700"
-                >
-                  Email Address
-                </label>
-                <input
+                <FormField
+                  label="Email Address"
                   type="email"
-                  id="email"
+                  name="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className="mt-1 block w-full px-4 py-3 rounded-lg border border-gray-300 shadow-sm focus:outline-none focus:ring-2 focus:ring-[#229ABD] focus:border-[#229ABD] transition"
                   placeholder="Enter your email"
-                  required
                 />
               </div>
               <div className="animate-in">
-                <label
-                  htmlFor="password"
-                  className="block text-sm font-semibold text-gray-700"
-                >
-                  Password
-                </label>
-                <div className="relative">
-                  <input
-                    type={showPassword ? "text" : "password"}
-                    id="password"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    className="mt-1 block w-full px-4 py-3 rounded-lg border border-gray-300 shadow-sm focus:outline-none focus:ring-2 focus:ring-[#229ABD] focus:border-[#229ABD] transition"
-                    placeholder="Enter your password"
-                    required
-                  />
-                  <button
-                    type="button"
-                    onClick={togglePasswordVisibility}
-                    className="absolute inset-y-0 right-0 flex items-center px-4 text-gray-500 hover:text-gray-700 focus:outline-none"
-                  >
-                    {showPassword ? (
-                      <IoEyeOff size={20} />
-                    ) : (
-                      <IoEye size={20} />
-                    )}
-                  </button>
-                </div>
+                <PasswordField
+                  label="Password"
+                  name="password"
+                  value={password}
+                  showPassword={showPassword}
+                  onChange={(e) => setPassword(e.target.value)}
+                  toggleVisibility={togglePasswordVisibility}
+                />
               </div>
             </div>
 
@@ -112,21 +86,6 @@ export default function LoginPage() {
           </p>
         </div>
       </div>
-    </div>
-  );
-}
-
-function FeatureItem({
-  icon: Icon,
-  text,
-}: {
-  icon: React.ElementType;
-  text: string;
-}) {
-  return (
-    <div className="flex items-center justify-center space-x-3 text-white animate-in">
-      <Icon className="w-8 h-8" />
-      <span className="text-lg font-medium">{text}</span>
     </div>
   );
 }
