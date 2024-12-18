@@ -1,45 +1,57 @@
 "use client";
 
-import { useState } from "react";
+import { useForm } from "react-hook-form";
 import { useGSAPAnimation } from "../../hooks/useGSAPAnimation";
 import { FaVideo, FaProjectDiagram, FaCode } from "react-icons/fa";
-import { FormField, PasswordField } from "../../components/Form/FormFields";
+import { FormField } from "../../components/Form/FormFields";
 import { FeatureItem } from "../../components/Icons/FeatureItem";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { signUpSchema } from "../../libs/utils/validationSchemas.ts";
+
+type SignUpFormData = z.infer<typeof signUpSchema>;
 
 export default function SignUpPage() {
-  const [formData, setFormData] = useState({
-    userName: "",
-    email: "",
-    password: "",
-    confirmPassword: "",
-    fullName: "",
-    phoneNumber: "",
-  });
-
-  const [showPassword, setShowPassword] = useState(false);
-  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-
   const containerRef = useGSAPAnimation();
 
-  const togglePasswordVisibility = () => setShowPassword((prev) => !prev);
-  const toggleConfirmPasswordVisibility = () =>
-    setShowConfirmPassword((prev) => !prev);
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<SignUpFormData>({
+    resolver: zodResolver(signUpSchema),
+    defaultValues: {
+      userName: "",
+      email: "",
+      password: "",
+      confirmPassword: "",
+      fullName: "",
+      phoneNumber: "",
+    },
+  });
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
+  // Handle form submission
+  const onSubmit = async (data: SignUpFormData) => {
+    try {
+      const response = await fetch("/api/auth/signup", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      });
 
-    // Basic validation
-    if (formData.password !== formData.confirmPassword) {
-      alert("Passwords do not match!");
-      return;
+      if (!response.ok) {
+        throw new Error("Failed to sign up");
+      }
+
+      const result = await response.json();
+      console.log("Sign up success:", result);
+      alert("Sign up successful!");
+    } catch (error) {
+      console.error("Sign up error:", error);
+      alert("An error occurred. Please try again.");
     }
-
-    console.log("Sign-up attempt with:", formData);
-  };
-
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
   return (
@@ -50,7 +62,7 @@ export default function SignUpPage() {
       >
         {/* Left Section */}
         <div className="hidden md:flex md:w-1/2 bg-gradient-to-br from-[#229ABD] to-[#126D8F] p-10 items-center justify-center">
-          <div className="space-y-6 text-center animate-in">
+          <div className="space-y-6 text-center">
             <h2 className="text-4xl font-extrabold text-white leading-snug">
               Student <br /> Solutions Hub
             </h2>
@@ -62,71 +74,71 @@ export default function SignUpPage() {
 
         {/* Right Section */}
         <div className="w-full md:w-1/2 p-10 bg-gray-50">
-          <h2 className="text-3xl font-extrabold text-[#020344] text-center mb-8 animate-in">
+          <h2 className="text-3xl font-extrabold text-[#020344] text-center mb-8">
             Sign Up
           </h2>
-          <form onSubmit={handleSubmit} className="space-y-8">
+          <form onSubmit={handleSubmit(onSubmit)} className="space-y-8">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <FormField
                 label="User Name"
-                type="text"
                 name="userName"
-                value={formData.userName}
-                onChange={handleInputChange}
                 placeholder="Enter your username"
+                errorMessage={errors.userName?.message}
+                register={register("userName")}
               />
+
               <FormField
                 label="Full Name"
-                type="text"
                 name="fullName"
-                value={formData.fullName}
-                onChange={handleInputChange}
                 placeholder="Enter your full name"
+                errorMessage={errors.fullName?.message}
+                register={register("fullName")}
               />
+
               <FormField
-                label="Email Address"
+                label="Email"
                 type="email"
                 name="email"
-                value={formData.email}
-                onChange={handleInputChange}
                 placeholder="Enter your email"
+                errorMessage={errors.email?.message}
+                register={register("email")}
               />
               <FormField
                 label="Phone Number"
-                type="tel"
+                type="phoneNumber"
                 name="phoneNumber"
-                value={formData.phoneNumber}
-                onChange={handleInputChange}
                 placeholder="Enter your phone number"
+                errorMessage={errors.phoneNumber?.message}
+                register={register("phoneNumber")}
               />
-              <PasswordField
+
+              <FormField
                 label="Password"
                 name="password"
-                value={formData.password}
-                showPassword={showPassword}
-                onChange={handleInputChange}
-                toggleVisibility={togglePasswordVisibility}
+                placeholder="Enter your password"
+                showPasswordToggle={true}
+                errorMessage={errors.password?.message}
+                register={register("password")}
               />
-              <PasswordField
+
+              <FormField
                 label="Confirm Password"
                 name="confirmPassword"
-                value={formData.confirmPassword}
-                showPassword={showConfirmPassword}
-                onChange={handleInputChange}
-                toggleVisibility={toggleConfirmPasswordVisibility}
+                placeholder="Enter your confirm password"
+                showPasswordToggle={true}
+                errorMessage={errors.confirmPassword?.message}
+                register={register("confirmPassword")}
               />
             </div>
 
-            <div className="animate-in">
-              <button
-                type="submit"
-                className="w-full py-3 px-4 text-white bg-[#229ABD] rounded-lg font-semibold text-lg shadow-lg hover:bg-[#126D8F] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#229ABD] transition-transform duration-200 hover:scale-105"
-              >
-                Sign Up
-              </button>
-            </div>
+            <button
+              type="submit"
+              className="w-full py-3 px-4 text-white bg-[#229ABD] rounded-lg font-semibold text-lg shadow-lg hover:bg-[#126D8F] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#229ABD] transition-transform duration-200 hover:scale-105"
+            >
+              Sign Up
+            </button>
           </form>
-          <p className="mt-6 text-center text-sm text-gray-600 animate-in">
+          <p className="mt-6 text-center text-sm text-gray-600">
             Already have an account?{" "}
             <a
               href="/auth/login"
