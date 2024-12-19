@@ -1,12 +1,28 @@
-import express from "express";
+import express from 'express';
+import dotenv from 'dotenv';
+import connectDB from './config/database.js';
+import authRoutes from './routes/auth.routes.js';
+import { errorHandler } from './middleware/errorHandler.js';
 
+dotenv.config();
 const app = express();
-const port = 3000;
+const PORT = process.env.PORT || 5000;
 
-app.get("/", (req, res) => {
-  res.send("Hello, TypeScript with ESM!");
-});
+// Middleware
+app.use(express.json());
 
-app.listen(port, () => {
-  console.log(`Server running at http://localhost:${port}`);
-});
+// Routes
+app.use('/api/auth', authRoutes);
+
+// Error Handler
+app.use(errorHandler);
+
+// Start Server
+const startServer = async () => {
+  await connectDB();
+  app.listen(PORT, () => {
+    console.log(`Server running on http://localhost:${PORT}`);
+  });
+};
+
+startServer();
