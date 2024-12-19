@@ -36,7 +36,9 @@ export const FormField = forwardRef<HTMLInputElement, FormFieldProps>(
         </label>
         <div className="relative">
           <input
-            type={showPasswordToggle ? (showPassword ? "text" : "password") : type}
+            type={
+              showPasswordToggle ? (showPassword ? "text" : "password") : type
+            }
             id={name}
             placeholder={placeholder || `Enter your ${label.toLowerCase()}`}
             className={`mt-1 block w-full px-4 py-3 rounded-lg border shadow-sm focus:outline-none focus:ring-2 transition ${
@@ -59,9 +61,7 @@ export const FormField = forwardRef<HTMLInputElement, FormFieldProps>(
             </div>
           )}
         </div>
-        {errorMessage && (
-          <p className="text-red-500 text-sm">{errorMessage}</p>
-        )}
+        {errorMessage && <p className="text-red-500 text-sm">{errorMessage}</p>}
       </div>
     );
   }
