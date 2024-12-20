@@ -8,13 +8,26 @@ export default {
   ],
   theme: {
     extend: {
-      animation: {
-        floating: "floating 6s ease-in-out infinite",
-      },
-      keyframes: {
-        floating: {
-          "0%, 100%": { transform: "translateY(0)" },
-          "50%": { transform: "translateY(-10px)" },
+      colors: {
+        primary: {
+          light: '#8B5CF6', // A vibrant purple
+          DEFAULT: '#6D28D9', // A deep purple
+          dark: '#5B21B6',
+        },
+        secondary: {
+          light: '#60A5FA', // A bright blue
+          DEFAULT: '#3B82F6', // A vivid blue
+          dark: '#2563EB',
+        },
+        accent: {
+          light: '#34D399', // A fresh green
+          DEFAULT: '#10B981', // An emerald green
+          dark: '#059669',
+        },
+        background: {
+          light: '#F3F4F6',
+          DEFAULT: '#E5E7EB',
+          dark: '#D1D5DB',
         },
       },
     },

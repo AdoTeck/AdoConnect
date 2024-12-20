@@ -7,8 +7,8 @@ interface FormFieldProps {
   name: string;
   placeholder?: string;
   errorMessage?: string;
-  register?: any; // Accepting React Hook Form's `register` function
-  showPasswordToggle?: boolean; // Enable visibility toggle for password fields
+  register?: any;
+  showPasswordToggle?: boolean;
 }
 
 export const FormField = forwardRef<HTMLInputElement, FormFieldProps>(
@@ -44,9 +44,9 @@ export const FormField = forwardRef<HTMLInputElement, FormFieldProps>(
             className={`mt-1 block w-full px-4 py-3 rounded-lg border shadow-sm focus:outline-none focus:ring-2 transition ${
               errorMessage
                 ? "border-red-500 focus:ring-red-500"
-                : "border-gray-300 focus:ring-[#229ABD] focus:border-[#229ABD]"
+                : "border-gray-300 focus:ring-primary-light focus:border-primary-light"
             }`}
-            {...register} // Apply React Hook Form's register
+            {...register}
           />
           {showPasswordToggle && (
             <div
@@ -68,3 +68,4 @@ export const FormField = forwardRef<HTMLInputElement, FormFieldProps>(
 );
 
 FormField.displayName = "FormField";
+

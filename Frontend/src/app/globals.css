@@ -26,3 +26,12 @@ body {
 .animate-floating {
   animation: floating 6s ease-in-out infinite;
 }
+
+button {
+  cursor: pointer;
+}
+
+button:not(:disabled) {
+  opacity: 1;
+}
+

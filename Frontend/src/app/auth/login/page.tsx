@@ -2,20 +2,34 @@
 
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import { useGSAPAnimation } from "../../hooks/useGSAPAnimation.ts";
-import { FaVideo, FaProjectDiagram, FaCode } from "react-icons/fa";
-import { FeatureItem } from "../../components/Icons/FeatureItem.tsx";
+import { useGSAPAnimation } from "../../hooks/useGSAPAnimation";
+import { FaVideo, FaProjectDiagram, FaCode, FaBookReader, FaLaptopCode, FaPuzzlePiece } from "react-icons/fa";
 import { FormField } from "../../components/Form/FormFields";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { loginSchema } from "../../libs/utils/validationSchemas.ts";
+import { loginSchema } from "../../libs/utils/validationSchemas";
+import { useEffect, useState } from "react";
+import gsap from "gsap";
+
+const FeatureItem = ({ icon: Icon, text }: { icon: React.ElementType; text: string }) => (
+  <div className="flex items-center space-x-3 text-white animate-in">
+    <Icon className="w-6 h-6" />
+    <span>{text}</span>
+  </div>
+);
 
 export default function LoginPage() {
   const containerRef = useGSAPAnimation();
+  const [isLoading, setIsLoading] = useState(false);
   type LoginFormData = z.infer<typeof loginSchema>;
 
-  const onSubmit = (data: LoginFormData) => {
+  const onSubmit = async (data: LoginFormData) => {
+    setIsLoading(true);
     console.log("Login attempt with:", data);
+    // Simulate API call
+    await new Promise(resolve => setTimeout(resolve, 2000));
+    setIsLoading(false);
   };
+
   const {
     register,
     handleSubmit,
@@ -25,30 +39,45 @@ export default function LoginPage() {
     defaultValues: {
       email: "",
       password: "",
+      rememberMe: false,
     },
   });
 
+  useEffect(() => {
+    const button = document.querySelector('.submit-button');
+    if (button) {
+      gsap.to(button, {
+        scale: isLoading ? 0.95 : 1,
+        duration: 0.2,
+        ease: "power2.out"
+      });
+    }
+  }, [isLoading]);
+
   return (
-    <div className="relative min-h-screen bg-gradient-to-r from-indigo-100 to-teal-100 flex items-center justify-center px-4 overflow-hidden">
+    <div className="relative min-h-screen bg-gradient-to-r from-primary-light to-secondary-light flex items-center justify-center px-4 overflow-hidden">
       <div
         className="max-w-5xl w-full bg-white rounded-2xl shadow-2xl overflow-hidden flex relative"
         ref={containerRef}
       >
         {/* Left Section */}
-        <div className="hidden md:flex md:w-1/2 bg-gradient-to-br from-[#229ABD] to-[#126D8F] p-10 items-center justify-center">
-          <div className="space-y-6 text-center animate-in">
-            <h2 className="text-4xl font-extrabold text-white leading-snug">
-              Student <br /> Solutions Hub
+        <div className="hidden md:flex md:w-1/2 bg-gradient-to-br from-primary-dark to-secondary-dark p-10 items-center justify-center left-section">
+          <div className="space-y-6 text-center">
+            <h2 className="text-4xl font-extrabold text-white leading-snug animate-in">
+              ADO Connect <br /> Hub
             </h2>
-            <FeatureItem icon={FaVideo} text="Video Tutorials & Reels" />
-            <FeatureItem icon={FaProjectDiagram} text="Project Assistance" />
-            <FeatureItem icon={FaCode} text="Developer Guidance" />
+            <FeatureItem icon={FaBookReader} text="Interactive Learning" />
+            <FeatureItem icon={FaLaptopCode} text="Coding Challenges" />
+            <FeatureItem icon={FaPuzzlePiece} text="Brain Teasers" />
+            <FeatureItem icon={FaVideo} text="Educational Videos" />
+            <FeatureItem icon={FaProjectDiagram} text="Project Collaboration" />
+            <FeatureItem icon={FaCode} text="Coding Tutorials" />
           </div>
         </div>
 
         {/* Right Section */}
-        <div className="w-full md:w-1/2 p-10 bg-gray-50">
-          <h2 className="text-3xl font-extrabold text-[#020344] text-center mb-8 animate-in">
+        <div className="w-full md:w-1/2 p-10 bg-background-light right-section">
+          <h2 className="text-3xl font-extrabold text-primary-dark text-center mb-8 animate-in">
             Login
           </h2>
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-8">
@@ -56,34 +85,28 @@ export default function LoginPage() {
               {/* Google Login Button */}
               <button
                 type="button"
-                className="w-full flex items-center justify-center py-3 px-4 bg-white border border-gray-300 rounded-lg shadow-sm hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-300"
+                className="w-full flex items-center justify-center gap-2 py-3 px-4 bg-white border border-gray-300 rounded-lg shadow-md hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 text-gray-700 font-medium transition duration-200 ease-in-out"
               >
-                <svg
-                  className="w-5 h-5 mr-3"
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 512 512"
-                >
-                  <path
-                    d="M113.47 309.408L95.648 375.94l-65.139 1.378C11.042 341.211 0 299.9 0 256c0-42.451 10.324-82.483 28.624-117.732h.014L86.63 148.9l25.404 57.644c-5.317 15.501-8.215 32.141-8.215 49.456.002 18.792 3.406 36.797 9.651 53.408z"
-                    fill="#fbbb00"
-                  />
-                  <path
-                    d="M507.527 208.176C510.467 223.662 512 239.655 512 256c0 18.328-1.927 36.206-5.598 53.451-12.462 58.683-45.025 109.925-90.134 146.187l-.014-.014-73.044-3.727-10.338-64.535c29.932-17.554 53.324-45.025 65.646-77.911h-136.89V208.176h245.899z"
-                    fill="#518ef8"
-                  />
-                  <path
-                    d="M416.253 455.624l.014.014C372.396 490.901 316.666 512 256 512c-97.491 0-182.252-54.491-225.491-134.681l82.961-67.91c21.619 57.698 77.278 98.771 142.53 98.771 28.047 0 54.323-7.582 76.87-20.818l83.383 68.262z"
-                    fill="#28b446"
-                  />
-                  <path
-                    d="M419.404 58.936l-82.933 67.896C313.136 112.246 285.552 103.82 256 103.82c-66.729 0-123.429 42.957-143.965 102.724l-83.397-68.276h-.014C71.23 56.123 157.06 0 256 0c62.115 0 119.068 22.126 163.404 58.936z"
-                    fill="#f14336"
-                  />
+                <svg className="w-5 h-5 mr-3 min-w-[20px] min-h-[20px]" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
+                  <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
+                  <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/>
+                  <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
+                  <path d="M1 1h22v22H1z" fill="none"/>
                 </svg>
                 <span className="text-gray-700 font-medium">
                   Sign in with Google
                 </span>
               </button>
+
+              <div className="relative my-6">
+                <div className="absolute inset-0 flex items-center">
+                  <div className="w-full border-t border-gray-300"></div>
+                </div>
+                <div className="relative flex justify-center text-sm">
+                  <span className="px-2 bg-background-light text-gray-500">Or continue with</span>
+                </div>
+              </div>
 
               {/* Email and Password Fields */}
               <div className="animate-in">
@@ -106,14 +129,46 @@ export default function LoginPage() {
                   register={register("password")}
                 />
               </div>
+
+              {/* Remember Me Checkbox */}
+              <div className="flex items-center justify-between animate-in">
+                <div className="flex items-center">
+                  <input
+                    id="remember-me"
+                    name="remember-me"
+                    type="checkbox"
+                    className="h-4 w-4 text-primary-DEFAULT focus:ring-primary-light border-gray-300 rounded"
+                    {...register("rememberMe")}
+                  />
+                  <label htmlFor="remember-me" className="ml-2 block text-sm text-gray-700">
+                    Remember me
+                  </label>
+                </div>
+                <div className="text-sm">
+                  <a href="/auth/forgot-password" className="font-medium text-primary-DEFAULT hover:text-primary-dark">
+                    Forgot your password?
+                  </a>
+                </div>
+              </div>
             </div>
 
             <div className="animate-in">
               <button
                 type="submit"
-                className="w-full py-3 px-4 text-white bg-[#229ABD] rounded-lg font-semibold text-lg shadow-lg hover:bg-[#126D8F] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#229ABD] transition-transform duration-200 hover:scale-105"
+                disabled={isLoading}
+                className="submit-button w-full py-3 px-4 text-white bg-[#6D28D9] rounded-lg font-semibold text-lg shadow-lg hover:bg-primary-dark focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-light transition-colors duration-300 ease-in-out"
               >
-                Sign In
+                {isLoading ? (
+                  <span className="flex items-center justify-center">
+                    <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                    </svg>
+                    Signing In...
+                  </span>
+                ) : (
+                  "Sign In"
+                )}
               </button>
             </div>
           </form>
@@ -121,7 +176,7 @@ export default function LoginPage() {
             Don't have an account?{" "}
             <a
               href="/auth/signup"
-              className="font-medium text-[#229ABD] hover:text-[#126D8F] transition-colors"
+              className="font-medium text-[#6D28D9] hover:text-primary-dark transition-colors"
             >
               Sign up
             </a>
@@ -131,3 +186,4 @@ export default function LoginPage() {
     </div>
   );
 }
+
