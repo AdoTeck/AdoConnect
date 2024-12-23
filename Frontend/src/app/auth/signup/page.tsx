@@ -1,23 +1,21 @@
 "use client";
 
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
-
 import {
-  FaVideo,
-  FaProjectDiagram,
-  FaCode,
   FaBookReader,
+  FaCode,
   FaLaptopCode,
+  FaProjectDiagram,
   FaPuzzlePiece,
+  FaVideo,
 } from "react-icons/fa";
-
 import { z } from "zod";
 
-import { useState } from "react";
 import { FormField } from "@/components";
 import { useGSAPAnimation } from "@/hooks";
 import { signUpSchema } from "@/utils";
-import { zodResolver } from "@hookform/resolvers/zod";
 
 const FeatureItem = ({
   icon: Icon,
@@ -26,8 +24,8 @@ const FeatureItem = ({
   icon: React.ElementType;
   text: string;
 }) => (
-  <div className="flex items-center space-x-3 text-white animate-in">
-    <Icon className="w-6 h-6" />
+  <div className="animate-in flex items-center space-x-3 text-white">
+    <Icon className="size-6" />
     <span>{text}</span>
   </div>
 );
@@ -83,15 +81,15 @@ export default function SignUpPage() {
   };
 
   return (
-    <div className="relative min-h-screen bg-gradient-to-r from-primary-light to-secondary-light flex items-center justify-center px-4 overflow-hidden">
+    <div className="relative flex min-h-screen items-center justify-center overflow-hidden bg-gradient-to-r from-primary-light to-secondary-light px-4">
       <div
-        className="max-w-5xl w-full bg-white rounded-2xl shadow-2xl overflow-hidden flex relative"
+        className="relative flex w-full max-w-5xl overflow-hidden rounded-2xl bg-white shadow-2xl"
         ref={containerRef}
       >
         {/* Left Section */}
-        <div className="hidden md:flex md:w-1/2 bg-gradient-to-br from-primary-dark to-secondary-dark p-10 items-center justify-center left-section">
+        <div className="left-section hidden items-center justify-center bg-gradient-to-br from-primary-dark to-secondary-dark p-10 md:flex md:w-1/2">
           <div className="space-y-6 text-center">
-            <h2 className="text-4xl font-extrabold text-white leading-snug animate-in">
+            <h2 className="animate-in text-4xl font-extrabold leading-snug text-white">
               EduTainment <br /> Hub
             </h2>
             <FeatureItem icon={FaBookReader} text="Interactive Learning" />
@@ -104,17 +102,17 @@ export default function SignUpPage() {
         </div>
 
         {/* Right Section */}
-        <div className="w-full md:w-1/2 p-10 bg-background-light right-section">
-          <h2 className="text-3xl font-extrabold text-primary-dark text-center mb-8 animate-in">
+        <div className="right-section w-full bg-background-light p-10 md:w-1/2">
+          <h2 className="animate-in mb-8 text-center text-3xl font-extrabold text-primary-dark">
             Sign Up
           </h2>
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
             <button
               type="button"
-              className="w-full flex items-center justify-center gap-2 py-3 px-4 bg-white border border-gray-300 rounded-lg shadow-md hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 text-gray-700 font-medium transition duration-200 ease-in-out"
+              className="flex w-full items-center justify-center gap-2 rounded-lg border border-gray-300 bg-white px-4 py-3 font-medium text-gray-700 shadow-md transition duration-200 ease-in-out hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
             >
               <svg
-                className="w-5 h-5 mr-3 min-w-[20px] min-h-[20px]"
+                className="mr-3 size-5 min-h-[20px] min-w-[20px]"
                 viewBox="0 0 24 24"
                 xmlns="http://www.w3.org/2000/svg"
               >
@@ -136,7 +134,7 @@ export default function SignUpPage() {
                 />
                 <path d="M1 1h22v22H1z" fill="none" />
               </svg>
-              <span className="text-gray-700 font-medium">
+              <span className="font-medium text-gray-700">
                 Sign up with Google
               </span>
             </button>
@@ -146,13 +144,13 @@ export default function SignUpPage() {
                 <div className="w-full border-t border-gray-300"></div>
               </div>
               <div className="relative flex justify-center text-sm">
-                <span className="px-2 bg-background-light text-gray-500">
+                <span className="bg-background-light px-2 text-gray-500">
                   Or sign up with email
                 </span>
               </div>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
               <FormField
                 label="User Name"
                 name="userName"
@@ -209,7 +207,7 @@ export default function SignUpPage() {
               <input
                 id="agree-terms"
                 type="checkbox"
-                className="h-4 w-4 text-primary-DEFAULT focus:ring-primary-light border-gray-300 rounded"
+                className="text-primary-DEFAULT size-4 rounded border-gray-300 focus:ring-primary-light"
                 {...register("agreeToTerms")}
               />
               <label
@@ -226,7 +224,7 @@ export default function SignUpPage() {
               </label>
             </div>
             {errors.agreeToTerms && (
-              <p className="text-red-500 text-sm mt-1">
+              <p className="mt-1 text-sm text-red-500">
                 {errors.agreeToTerms.message}
               </p>
             )}
@@ -234,12 +232,12 @@ export default function SignUpPage() {
             <button
               type="submit"
               disabled={isLoading}
-              className="w-full py-3 px-4 text-white bg-[#6D28D9] rounded-lg font-semibold text-lg shadow-lg hover:bg-primary-dark focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-light transition-colors duration-300 ease-in-out"
+              className="w-full rounded-lg bg-[#6D28D9] px-4 py-3 text-lg font-semibold text-white shadow-lg transition-colors duration-300 ease-in-out hover:bg-primary-dark focus:outline-none focus:ring-2 focus:ring-primary-light focus:ring-offset-2"
             >
               {isLoading ? (
                 <span className="flex items-center justify-center">
                   <svg
-                    className="animate-spin -ml-1 mr-3 h-5 w-5 text-white"
+                    className="-ml-1 mr-3 size-5 animate-spin text-white"
                     xmlns="http://www.w3.org/2000/svg"
                     fill="none"
                     viewBox="0 0 24 24"
@@ -265,11 +263,11 @@ export default function SignUpPage() {
               )}
             </button>
           </form>
-          <p className="mt-6 text-center text-sm text-gray-600 animate-in">
+          <p className="animate-in mt-6 text-center text-sm text-gray-600">
             Already have an account?{" "}
             <a
               href="/auth/login"
-              className="font-medium text-[#6D28D9] hover:text-primary-dark transition-colors"
+              className="font-medium text-[#6D28D9] transition-colors hover:text-primary-dark"
             >
               Log in
             </a>

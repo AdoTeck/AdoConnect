@@ -1,5 +1,6 @@
 import { forwardRef, useState } from "react";
 import { IoEye, IoEyeOff } from "react-icons/io5";
+import { UseFormRegister } from "react-hook-form";
 
 interface FormFieldProps {
   label: string;
@@ -7,7 +8,7 @@ interface FormFieldProps {
   name: string;
   placeholder?: string;
   errorMessage?: string;
-  register?: any;
+  register?: ReturnType<UseFormRegister<any>>;
   showPasswordToggle?: boolean;
 }
 
@@ -22,12 +23,12 @@ export const FormField = forwardRef<HTMLInputElement, FormFieldProps>(
       register,
       showPasswordToggle = false,
     },
-    ref
+    ref,
   ) => {
     const [showPassword, setShowPassword] = useState(false);
 
     return (
-      <div className="space-y-2 relative">
+      <div className="relative space-y-2">
         <label
           htmlFor={name}
           className="block text-sm font-semibold text-gray-700"
@@ -41,31 +42,30 @@ export const FormField = forwardRef<HTMLInputElement, FormFieldProps>(
             }
             id={name}
             placeholder={placeholder || `Enter your ${label.toLowerCase()}`}
-            className={`mt-1 block w-full px-4 py-3 rounded-lg border shadow-sm focus:outline-none focus:ring-2 transition ${
+            className={`mt-1 block w-full rounded-lg border px-4 py-3 shadow-sm transition focus:outline-none focus:ring-2 ${
               errorMessage
                 ? "border-red-500 focus:ring-red-500"
-                : "border-gray-300 focus:ring-primary-light focus:border-primary-light"
+                : "border-gray-300 focus:border-primary-light focus:ring-primary-light"
             }`}
             {...register}
           />
           {showPasswordToggle && (
             <div
-              className="absolute inset-y-0 right-4 flex items-center cursor-pointer"
+              className="absolute inset-y-0 right-4 flex cursor-pointer items-center"
               onClick={() => setShowPassword((prev) => !prev)}
             >
               {showPassword ? (
-                <IoEyeOff className="w-6 h-6 text-gray-500" />
+                <IoEyeOff className="size-6 text-gray-500" />
               ) : (
-                <IoEye className="w-6 h-6 text-gray-500" />
+                <IoEye className="size-6 text-gray-500" />
               )}
             </div>
           )}
         </div>
-        {errorMessage && <p className="text-red-500 text-sm">{errorMessage}</p>}
+        {errorMessage && <p className="text-sm text-red-500">{errorMessage}</p>}
       </div>
     );
-  }
+  },
 );
 
 FormField.displayName = "FormField";
-

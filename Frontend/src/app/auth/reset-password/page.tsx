@@ -1,10 +1,10 @@
 "use client";
 
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useState } from "react";
 import { FormField } from "@/components";
 import { useGSAPAnimation } from "@/hooks";
 
@@ -45,16 +45,16 @@ export default function ResetPasswordPage() {
   });
 
   return (
-    <div className="relative min-h-screen bg-gradient-to-r from-primary-light to-secondary-light flex items-center justify-center px-4 overflow-hidden">
+    <div className="relative flex min-h-screen items-center justify-center overflow-hidden bg-gradient-to-r from-primary-light to-secondary-light px-4">
       <div
-        className="w-full max-w-md bg-white rounded-2xl shadow-2xl overflow-hidden relative"
+        className="relative w-full max-w-md overflow-hidden rounded-2xl bg-white shadow-2xl"
         ref={containerRef}
       >
-        <div className="p-10 bg-background-light">
-          <h2 className="text-3xl font-extrabold text-primary-dark text-center mb-8 animate-in">
+        <div className="bg-background-light p-10">
+          <h2 className="animate-in mb-8 text-center text-3xl font-extrabold text-primary-dark">
             Reset Password
           </h2>
-          <p className="text-center text-gray-600 mb-6 animate-in">
+          <p className="animate-in mb-6 text-center text-gray-600">
             Enter your new password below.
           </p>
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
@@ -82,12 +82,12 @@ export default function ResetPasswordPage() {
               <button
                 type="submit"
                 disabled={isLoading}
-                className="w-full py-3 px-4 text-white bg-[#6D28D9] rounded-lg font-semibold text-lg shadow-lg hover:bg-primary-dark focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-light transition-colors duration-300 ease-in-out"
+                className="w-full rounded-lg bg-[#6D28D9] px-4 py-3 text-lg font-semibold text-white shadow-lg transition-colors duration-300 ease-in-out hover:bg-primary-dark focus:outline-none focus:ring-2 focus:ring-primary-light focus:ring-offset-2"
               >
                 {isLoading ? (
                   <span className="flex items-center justify-center">
                     <svg
-                      className="animate-spin -ml-1 mr-3 h-5 w-5 text-white"
+                      className="-ml-1 mr-3 size-5 animate-spin text-white"
                       xmlns="http://www.w3.org/2000/svg"
                       fill="none"
                       viewBox="0 0 24 24"
@@ -114,11 +114,11 @@ export default function ResetPasswordPage() {
               </button>
             </div>
           </form>
-          <p className="mt-6 text-center text-sm text-gray-600 animate-in">
+          <p className="animate-in mt-6 text-center text-sm text-gray-600">
             Remember your password?{" "}
             <a
               href="/auth/login"
-              className="font-medium text-[#6D28D9] hover:text-primary-dark transition-colors"
+              className="font-medium text-[#6D28D9] transition-colors hover:text-primary-dark"
             >
               Back to Login
             </a>

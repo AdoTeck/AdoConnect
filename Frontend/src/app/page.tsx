@@ -1,8 +1,8 @@
 "use client";
 
-import { useEffect } from "react";
 import { gsap } from "gsap";
 import { SlowMo } from "gsap/EasePack";
+import { useEffect } from "react";
 
 export default function Home() {
   useEffect(() => {

@@ -1,19 +1,19 @@
 "use client";
 
-import { useForm, Controller } from "react-hook-form";
-import { z } from "zod";
-
+import { zodResolver } from "@hookform/resolvers/zod";
+import gsap from "gsap";
+import { useEffect, useState } from "react";
+import { Controller, useForm } from "react-hook-form";
 import {
-  FaShieldAlt,
-  FaMobileAlt,
+  FaFingerprint,
   FaKey,
   FaLock,
+  FaMobileAlt,
+  FaShieldAlt,
   FaUserShield,
-  FaFingerprint,
 } from "react-icons/fa";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useEffect, useState } from "react";
-import gsap from "gsap";
+import { z } from "zod";
+
 import { OTPInput } from "@/components";
 import { useGSAPAnimation } from "@/hooks";
 
@@ -24,8 +24,8 @@ const FeatureItem = ({
   icon: React.ElementType;
   text: string;
 }) => (
-  <div className="flex items-center space-x-3 text-white animate-in">
-    <Icon className="w-6 h-6" />
+  <div className="animate-in flex items-center space-x-3 text-white">
+    <Icon className="size-6" />
     <span>{text}</span>
   </div>
 );
@@ -95,15 +95,15 @@ export default function OTPPage() {
   };
 
   return (
-    <div className="relative min-h-screen bg-gradient-to-r from-primary-light to-secondary-light flex items-center justify-center px-4 overflow-hidden">
+    <div className="relative flex min-h-screen items-center justify-center overflow-hidden bg-gradient-to-r from-primary-light to-secondary-light px-4">
       <div
-        className="max-w-5xl w-full bg-white rounded-2xl shadow-2xl overflow-hidden flex relative"
+        className="relative flex w-full max-w-5xl overflow-hidden rounded-2xl bg-white shadow-2xl"
         ref={containerRef}
       >
         {/* Left Section */}
-        <div className="hidden md:flex md:w-1/2 bg-gradient-to-br from-primary-dark to-secondary-dark p-10 items-center justify-center left-section">
+        <div className="left-section hidden items-center justify-center bg-gradient-to-br from-primary-dark to-secondary-dark p-10 md:flex md:w-1/2">
           <div className="space-y-6 text-center">
-            <h2 className="text-4xl font-extrabold text-white leading-snug animate-in">
+            <h2 className="animate-in text-4xl font-extrabold leading-snug text-white">
               Secure <br /> Verification
             </h2>
             <FeatureItem icon={FaShieldAlt} text="Enhanced Security" />
@@ -116,11 +116,11 @@ export default function OTPPage() {
         </div>
 
         {/* Right Section */}
-        <div className="w-full md:w-1/2 p-10 bg-background-light right-section">
-          <h2 className="text-3xl font-extrabold text-primary-dark text-center mb-8 animate-in">
+        <div className="right-section w-full bg-background-light p-10 md:w-1/2">
+          <h2 className="animate-in mb-8 text-center text-3xl font-extrabold text-primary-dark">
             Enter OTP
           </h2>
-          <p className="text-center text-gray-600 mb-6 animate-in">
+          <p className="animate-in mb-6 text-center text-gray-600">
             We've sent a 6-digit code to your registered email or phone number.
           </p>
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-8">
@@ -148,12 +148,12 @@ export default function OTPPage() {
               <button
                 type="submit"
                 disabled={isLoading}
-                className="submit-button w-full py-3 px-4 text-white bg-[#6D28D9] rounded-lg font-semibold text-lg shadow-lg hover:bg-primary-dark focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-light transition-colors duration-300 ease-in-out"
+                className="submit-button w-full rounded-lg bg-[#6D28D9] px-4 py-3 text-lg font-semibold text-white shadow-lg transition-colors duration-300 ease-in-out hover:bg-primary-dark focus:outline-none focus:ring-2 focus:ring-primary-light focus:ring-offset-2"
               >
                 {isLoading ? (
                   <span className="flex items-center justify-center">
                     <svg
-                      className="animate-spin -ml-1 mr-3 h-5 w-5 text-white"
+                      className="-ml-1 mr-3 size-5 animate-spin text-white"
                       xmlns="http://www.w3.org/2000/svg"
                       fill="none"
                       viewBox="0 0 24 24"
@@ -180,14 +180,14 @@ export default function OTPPage() {
               </button>
             </div>
           </form>
-          <div className="mt-6 text-center animate-in">
+          <div className="animate-in mt-6 text-center">
             <button
               onClick={handleResendOTP}
               disabled={resendDisabled}
               className={`text-sm font-medium ${
                 resendDisabled
-                  ? "text-gray-400 cursor-not-allowed"
-                  : "text-[#6D28D9] hover:text-primary-dark transition-colors"
+                  ? "cursor-not-allowed text-gray-400"
+                  : "text-[#6D28D9] transition-colors hover:text-primary-dark"
               }`}
             >
               {resendDisabled
@@ -195,11 +195,11 @@ export default function OTPPage() {
                 : "Didn't receive the OTP? Resend"}
             </button>
           </div>
-          <p className="mt-6 text-center text-sm text-gray-600 animate-in">
+          <p className="animate-in mt-6 text-center text-sm text-gray-600">
             Back to{" "}
             <a
               href="/auth/login"
-              className="font-medium text-[#6D28D9] hover:text-primary-dark transition-colors"
+              className="font-medium text-[#6D28D9] transition-colors hover:text-primary-dark"
             >
               Login
             </a>

@@ -1,5 +1,5 @@
-import { useEffect, useRef } from "react";
 import gsap from "gsap";
+import { useEffect, useRef } from "react";
 
 export const useGSAPAnimation = () => {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -24,7 +24,7 @@ export const useGSAPAnimation = () => {
           duration: 0.8,
           ease: "power3.out",
         },
-        "-=0.3"
+        "-=0.3",
       );
 
       // Animate the right section (form)
@@ -36,7 +36,7 @@ export const useGSAPAnimation = () => {
           duration: 0.8,
           ease: "power3.out",
         },
-        "-=0.6"
+        "-=0.6",
       );
 
       // Animate form elements
@@ -49,7 +49,7 @@ export const useGSAPAnimation = () => {
           duration: 0.6,
           ease: "power2.out",
         },
-        "-=0.4"
+        "-=0.4",
       );
     }
   }, []);
