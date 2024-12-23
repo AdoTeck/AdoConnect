@@ -13,8 +13,9 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: 'Student Solutions Hub - Login',
-  description: 'Access video tutorials, project assistance, and developer guidance.',
+  title: "Student Solutions Hub - Login",
+  description:
+    "Access video tutorials, project assistance, and developer guidance.",
 };
 
 export default function RootLayout({

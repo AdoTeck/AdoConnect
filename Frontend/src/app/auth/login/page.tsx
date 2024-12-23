@@ -2,7 +2,7 @@
 
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import { useGSAPAnimation } from "../../hooks/useGSAPAnimation";
+
 import {
   FaVideo,
   FaProjectDiagram,
@@ -11,11 +11,14 @@ import {
   FaLaptopCode,
   FaPuzzlePiece,
 } from "react-icons/fa";
-import { FormField } from "../../components/Form/FormFields";
+
 import { zodResolver } from "@hookform/resolvers/zod";
-import { loginSchema } from "../../libs/utils/validationSchemas";
+
 import { useEffect, useState } from "react";
 import gsap from "gsap";
+import { FormField } from "@/components";
+import { loginSchema } from "@/utils";
+import { useGSAPAnimation } from "@/hooks";
 
 const FeatureItem = ({
   icon: Icon,

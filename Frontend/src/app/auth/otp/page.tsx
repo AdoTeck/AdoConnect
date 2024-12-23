@@ -2,7 +2,7 @@
 
 import { useForm, Controller } from "react-hook-form";
 import { z } from "zod";
-import { useGSAPAnimation } from "../../hooks/useGSAPAnimation";
+
 import {
   FaShieldAlt,
   FaMobileAlt,
@@ -14,7 +14,8 @@ import {
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useEffect, useState } from "react";
 import gsap from "gsap";
-import { OTPInput } from "../../components/OTP-Input/OTPInput";
+import { OTPInput } from "@/components";
+import { useGSAPAnimation } from "@/hooks";
 
 const FeatureItem = ({
   icon: Icon,
