@@ -3,6 +3,7 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
+import axios from "axios";
 import {
   FaBookReader,
   FaCode,
@@ -57,24 +58,21 @@ export default function SignUpPage() {
   const onSubmit = async (data: SignUpFormData) => {
     setIsLoading(true);
     try {
-      const response = await fetch("/api/auth/signup", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(data),
-      });
-
-      if (!response.ok) {
-        throw new Error("Failed to sign up");
-      }
-
-      const result = await response.json();
-      console.log("Sign up success:", result);
-      alert("Sign up successful!");
+      const response = await axios.post(
+        "http://localhost:8080/auth/signup",
+        data,
+      );
+      console.log("Sign up success:", response.data);
     } catch (error) {
       console.error("Sign up error:", error);
-      alert("An error occurred. Please try again.");
+      if (axios.isAxiosError(error)) {
+        alert(
+          error.response?.data?.message ||
+            "An error occurred. Please try again.",
+        );
+      } else {
+        alert("An unexpected error occurred. Please try again.");
+      }
     } finally {
       setIsLoading(false);
     }

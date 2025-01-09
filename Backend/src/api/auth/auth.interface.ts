@@ -1,7 +1,9 @@
 export interface RegisterInput {
-    email: string;
-    password: string;
-    name: string;
+  username : string;
+  fullname : string;
+  email: string;
+  phonenumber: string;
+  password: string;
   }
   
   export interface LoginInput {

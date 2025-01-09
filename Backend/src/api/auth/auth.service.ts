@@ -15,38 +15,40 @@ export class AuthService {
     try {
       const hashedPassword = await bcrypt.hash(input.password, 10);
       const user = new User({
+        username: input.username,
+        fullname : input.fullname,
         email: input.email,
+        phonenumber: input.phonenumber,
         password: hashedPassword,
-        name: input.name,
       });
 
       await user.save();
 
       const token = jwt.sign({ userId: user._id }, config.JWT_SECRET, { expiresIn: '1d' });
 
-      return { user: { id: user._id, email: user.email, name: user.name }, token };
+      return { user: { id: user._id, email: user.email, name: user.username }, token };
     } catch (error) {
       throw new InternalServerError('Failed to create user');
     }
   }
 
-  static async login(input: LoginInput) {
-    const user = await User.findOne({ email: input.email });
-    if (!user) {
-      throw new UnauthorizedError('Invalid email or password');
-    }
+  // static async login(input: LoginInput) {
+  //   const user = await User.findOne({ email: input.email });
+  //   if (!user) {
+  //     throw new UnauthorizedError('Invalid email or password');
+  //   }
 
-    const isPasswordValid = await bcrypt.compare(input.password, user.password);
-    if (!isPasswordValid) {
-      throw new UnauthorizedError('Invalid email or password');
-    }
+  //   const isPasswordValid = await bcrypt.compare(input.password, user.password);
+  //   if (!isPasswordValid) {
+  //     throw new UnauthorizedError('Invalid email or password');
+  //   }
 
-    try {
-      const token = jwt.sign({ userId: user._id }, config.JWT_SECRET, { expiresIn: '1d' });
-      return { user: { id: user._id, email: user.email, name: user.name }, token };
-    } catch (error) {
-      throw new InternalServerError('Failed to generate token');
-    }
-  }
+  //   try {
+  //     const token = jwt.sign({ userId: user._id }, config.JWT_SECRET, { expiresIn: '1d' });
+  //     return { user: { id: user._id, email: user.email, name: user.name }, token };
+  //   } catch (error) {
+  //     throw new InternalServerError('Failed to generate token');
+  //   }
+  // }
 }
 

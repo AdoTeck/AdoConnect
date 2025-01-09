@@ -1,6 +1,6 @@
 import { forwardRef, useState } from "react";
-import { IoEye, IoEyeOff } from "react-icons/io5";
 import { UseFormRegister } from "react-hook-form";
+import { IoEye, IoEyeOff } from "react-icons/io5";
 
 interface FormFieldProps {
   label: string;

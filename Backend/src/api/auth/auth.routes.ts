@@ -5,8 +5,8 @@ import { registerSchema, loginSchema } from './auth.schema';
 
 const router = Router();
 
-router.post('/register', validationMiddleware(registerSchema), AuthController.register);
-router.post('/login', validationMiddleware(loginSchema), AuthController.login);
+router.post('/auth/signup', validationMiddleware(registerSchema), AuthController.register);
+// router.post('/login', validationMiddleware(loginSchema), AuthController.login);
 
 export const authRoutes = router;
 
