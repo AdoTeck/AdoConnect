@@ -1,7 +1,7 @@
-import app from './app';
-import { config } from '../config/env';
-import { logger } from '../config/logger';
-import { connectToDatabase } from '../config/database';
+import app from "./app";
+import { config } from "../config/env";
+import { logger } from "../config/logger";
+import { connectToDatabase } from "../config/database";
 
 const startServer = async () => {
   try {
@@ -10,10 +10,9 @@ const startServer = async () => {
       logger.info(`Server is running on port ${config.PORT}`);
     });
   } catch (error) {
-    logger.error('Failed to start server:', error);
+    logger.error("Failed to start server:", error);
     process.exit(1);
   }
 };
 
 export default startServer;
-

@@ -1,8 +1,13 @@
-import { Request, Response, NextFunction } from 'express';
-import { CustomError, ValidationError } from '../success-engine/error';
-import { logger } from '../config/logger';
+import { Request, Response, NextFunction } from "express";
+import { CustomError, ValidationError } from "../success-engine/error";
+import { logger } from "../config/logger";
 
-export const errorMiddleware = (err: Error, req: Request, res: Response, next: NextFunction) => {
+export const errorMiddleware = (
+  err: Error,
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
   logger.error(err);
 
   if (err instanceof CustomError) {
@@ -21,7 +26,6 @@ export const errorMiddleware = (err: Error, req: Request, res: Response, next: N
 
   res.status(500).json({
     success: false,
-    message: 'Internal Server Error',
+    message: "Internal Server Error",
   });
 };
-

@@ -1,5 +1,5 @@
-import { Response } from 'express';
-import { CustomError } from './error';
+import { Response } from "express";
+import { CustomError } from "./error";
 
 export const errorResponse = (res: Response, error: CustomError) => {
   res.status(error.statusCode).json({
@@ -8,4 +8,3 @@ export const errorResponse = (res: Response, error: CustomError) => {
     errors: error.errors,
   });
 };
-

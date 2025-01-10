@@ -1,13 +1,17 @@
-import { Request, Response, NextFunction } from 'express';
-import jwt from 'jsonwebtoken';
-import { config } from '../config/env';
-import { UnauthorizedError } from '../success-engine/error';
+import { Request, Response, NextFunction } from "express";
+import jwt from "jsonwebtoken";
+import { config } from "../config/env";
+import { UnauthorizedError } from "../success-engine/error";
 
-export const authMiddleware = (req: Request, res: Response, next: NextFunction) => {
-  const token = req.header('Authorization')?.replace('Bearer ', '');
+export const authMiddleware = (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
+  const token = req.header("Authorization")?.replace("Bearer ", "");
 
   if (!token) {
-    throw new UnauthorizedError('No token provided');
+    throw new UnauthorizedError("No token provided");
   }
 
   try {
@@ -15,7 +19,6 @@ export const authMiddleware = (req: Request, res: Response, next: NextFunction) 
     (req as any).user = decoded;
     next();
   } catch (error) {
-    throw new UnauthorizedError('Invalid token');
+    throw new UnauthorizedError("Invalid token");
   }
 };
-

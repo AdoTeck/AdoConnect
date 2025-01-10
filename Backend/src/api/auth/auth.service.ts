@@ -1,22 +1,26 @@
-import bcrypt from 'bcrypt';
-import jwt from 'jsonwebtoken';
-import { config } from '../../config/env';
-import { User } from '../../models/user.model';
-import { RegisterInput, LoginInput } from './auth.interface';
-import { BadRequestError, UnauthorizedError, InternalServerError } from '../../success-engine/error';
+import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken";
+import { config } from "../../config/env";
+import { User } from "../../models/user.model";
+import { RegisterInput, LoginInput } from "./auth.interface";
+import {
+  BadRequestError,
+  UnauthorizedError,
+  InternalServerError,
+} from "../../success-engine/error";
 
 export class AuthService {
   static async register(input: RegisterInput) {
     const existingUser = await User.findOne({ email: input.email });
     if (existingUser) {
-      throw new BadRequestError('Email already in use');
+      throw new BadRequestError("Email already in use");
     }
 
     try {
       const hashedPassword = await bcrypt.hash(input.password, 10);
       const user = new User({
         username: input.username,
-        fullname : input.fullname,
+        fullname: input.fullname,
         email: input.email,
         phonenumber: input.phonenumber,
         password: hashedPassword,
@@ -24,11 +28,16 @@ export class AuthService {
 
       await user.save();
 
-      const token = jwt.sign({ userId: user._id }, config.JWT_SECRET, { expiresIn: '1d' });
+      const token = jwt.sign({ userId: user._id }, config.JWT_SECRET, {
+        expiresIn: "1d",
+      });
 
-      return { user: { id: user._id, email: user.email, name: user.username }, token };
+      return {
+        user: { id: user._id, email: user.email, name: user.username },
+        token,
+      };
     } catch (error) {
-      throw new InternalServerError('Failed to create user');
+      throw new InternalServerError("Failed to create user");
     }
   }
 
@@ -51,4 +60,3 @@ export class AuthService {
   //   }
   // }
 }
-

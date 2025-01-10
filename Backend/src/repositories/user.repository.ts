@@ -1,4 +1,4 @@
-import { User, IUser } from '../models/user.model';
+import { User, IUser } from "../models/user.model";
 
 export class UserRepository {
   static async findByEmail(email: string): Promise<IUser | null> {
@@ -10,4 +10,3 @@ export class UserRepository {
     return user.save();
   }
 }
-
