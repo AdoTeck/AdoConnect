@@ -10,6 +10,7 @@ router.post(
   validationMiddleware(registerSchema),
   AuthController.register,
 );
+router.get("/signup");
 // router.post('/login', validationMiddleware(loginSchema), AuthController.login);
 
 export const authRoutes = router;

@@ -15,14 +15,15 @@ const emailSchema = z
   );
 
 export const registerSchema = z.object({
-  username: z.string().min(1, "Username is required"), // Username must not be empty
-  fullname: z.string().min(1, "Full name is required"), // Full name must not be empty
+  userName: z.string().min(1, "Username is required"), // Username must not be empty
+  fullName: z.string().min(1, "Full name is required"), // Full name must not be empty
   email: emailSchema, // Reuse the refined email schema
-  phonenumber: z.string().refine((number) => /^\d{10,15}$/.test(number), {
+  phoneNumber: z.string().refine((number) => /^\d{10,15}$/.test(number), {
     message:
       "Phone number must contain only digits and be 10-15 characters long",
   }), // Validate phonenumber
   password: z.string().min(6, "Password must be at least 6 characters long"), // Password validation
+  agreeToTerms: z.boolean(), // Terms agreement
 });
 
 export const loginSchema = z.object({

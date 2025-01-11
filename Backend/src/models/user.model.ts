@@ -1,16 +1,17 @@
 import mongoose, { Document, Schema } from "mongoose";
 
 export interface IUser extends Document {
-  username: string;
-  fullname: string;
+  userName: string;
+  fullName: string;
   email: string;
-  phonenumber: string;
+  phoneNumber: string;
   password: string;
+  agreeToTerms: boolean;
 }
 
 const userSchema = new Schema<IUser>(
   {
-    username: {
+    userName: {
       type: String,
       required: true,
       unique: true,
@@ -18,7 +19,7 @@ const userSchema = new Schema<IUser>(
       minlength: 3,
       maxlength: 30,
     },
-    fullname: {
+    fullName: {
       type: String,
       required: true,
       trim: true,
@@ -31,7 +32,7 @@ const userSchema = new Schema<IUser>(
       unique: true,
       match: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
     },
-    phonenumber: {
+    phoneNumber: {
       type: String,
       required: true,
       unique: true,
@@ -41,6 +42,10 @@ const userSchema = new Schema<IUser>(
       required: true,
       minlength: 8,
       maxlength: 128,
+    },
+    agreeToTerms: {
+      type: Boolean,
+      required: true,
     },
   },
   {

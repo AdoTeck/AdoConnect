@@ -19,11 +19,12 @@ export class AuthService {
     try {
       const hashedPassword = await bcrypt.hash(input.password, 10);
       const user = new User({
-        username: input.username,
-        fullname: input.fullname,
+        userName: input.userName,
+        fullName: input.fullName,
         email: input.email,
-        phonenumber: input.phonenumber,
+        phoneNumber: input.phoneNumber,
         password: hashedPassword,
+        agreeToTerms: input.agreeToTerms,
       });
 
       await user.save();
@@ -33,10 +34,11 @@ export class AuthService {
       });
 
       return {
-        user: { id: user._id, email: user.email, name: user.username },
+        user: { id: user._id, email: user.email, name: user.userName },
         token,
       };
     } catch (error) {
+      console.error("Error while creating user:", error);
       throw new InternalServerError("Failed to create user");
     }
   }

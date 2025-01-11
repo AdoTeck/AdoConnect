@@ -1,9 +1,10 @@
 export interface RegisterInput {
-  username: string;
-  fullname: string;
+  userName: string;
+  fullName: string;
   email: string;
-  phonenumber: string;
+  phoneNumber: string;
   password: string;
+  agreeToTerms: boolean;
 }
 
 export interface LoginInput {

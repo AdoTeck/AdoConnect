@@ -17,6 +17,7 @@ import { z } from "zod";
 import { FormField } from "@/components";
 import { useGSAPAnimation } from "@/hooks";
 import { signUpSchema } from "@/utils";
+import { redirect } from 'next/navigation'
 
 const FeatureItem = ({
   icon: Icon,
@@ -57,12 +58,21 @@ export default function SignUpPage() {
   // Handle form submission
   const onSubmit = async (data: SignUpFormData) => {
     setIsLoading(true);
+    console.log("Form data:", data);
     try {
       const response = await axios.post(
         "http://localhost:8080/api/auth/signup",
         data,
       );
+      const {
+        data: { token, user },
+      } = response.data;
+
+    // Store token securely
+    sessionStorage.setItem("token", token);
+    console.log("Sign up success:", user);
       console.log("Sign up success:", response.data);
+      redirect("/auth/otp");
     } catch (error) {
       console.error("Sign up error:", error);
       if (axios.isAxiosError(error)) {
