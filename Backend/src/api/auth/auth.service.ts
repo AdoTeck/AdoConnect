@@ -11,12 +11,13 @@ import {
 
 export class AuthService {
   static async register(input: RegisterInput) {
-    const existingUser = await User.findOne({ email: input.email });
+    try {
+      const existingUser = await User.findOne({ email: input.email });
     if (existingUser) {
       throw new BadRequestError("Email already in use");
     }
 
-    try {
+    
       const hashedPassword = await bcrypt.hash(input.password, 10);
       const user = new User({
         userName: input.userName,
@@ -39,6 +40,9 @@ export class AuthService {
       };
     } catch (error) {
       console.error("Error while creating user:", error);
+      if (error instanceof BadRequestError) {
+        throw error;
+      }
       throw new InternalServerError("Failed to create user");
     }
   }

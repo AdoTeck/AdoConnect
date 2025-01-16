@@ -4,6 +4,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import axios from "axios";
+import toast, { Toaster } from "react-hot-toast";
 import {
   FaBookReader,
   FaCode,
@@ -17,7 +18,7 @@ import { z } from "zod";
 import { FormField } from "@/components";
 import { useGSAPAnimation } from "@/hooks";
 import { signUpSchema } from "@/utils";
-import { redirect } from 'next/navigation'
+import { redirect } from "next/navigation";
 
 const FeatureItem = ({
   icon: Icon,
@@ -58,7 +59,6 @@ export default function SignUpPage() {
   // Handle form submission
   const onSubmit = async (data: SignUpFormData) => {
     setIsLoading(true);
-    console.log("Form data:", data);
     try {
       const response = await axios.post(
         "http://localhost:8080/api/auth/signup",
@@ -68,20 +68,31 @@ export default function SignUpPage() {
         data: { token, user },
       } = response.data;
 
-    // Store token securely
-    sessionStorage.setItem("token", token);
-    console.log("Sign up success:", user);
-      console.log("Sign up success:", response.data);
-      redirect("/auth/otp");
+      // Store token securely
+      sessionStorage.setItem("token", token);
+      toast.success("Sign up successful! Redirecting...");
+      setTimeout(() => {
+        redirect("/auth/otp");
+      }, 1000);
     } catch (error) {
       console.error("Sign up error:", error);
       if (axios.isAxiosError(error)) {
-        alert(
-          error.response?.data?.message ||
-            "An error occurred. Please try again.",
-        );
+        const errorResponse = error.response?.data;
+        console.log("Error response:", errorResponse);
+        if (errorResponse) {
+          // Display detailed error messages from backend
+          if (Array.isArray(errorResponse.errors)) {
+            errorResponse.errors.forEach((err: string) => {
+              toast.error(err);
+            });
+          } else {
+            toast.error(errorResponse.message || "An error occurred.");
+          }
+        } else {
+          toast.error("An error occurred. Please try again.");
+        }
       } else {
-        alert("An unexpected error occurred. Please try again.");
+        toast.error("An unexpected error occurred. Please try again.");
       }
     } finally {
       setIsLoading(false);
@@ -90,6 +101,7 @@ export default function SignUpPage() {
 
   return (
     <div className="relative flex min-h-screen items-center justify-center overflow-hidden bg-gradient-to-r from-primary-light to-secondary-light px-4">
+      <Toaster position="top-center" reverseOrder={false} />
       <div
         className="relative flex w-full max-w-5xl overflow-hidden rounded-2xl bg-white shadow-2xl"
         ref={containerRef}
@@ -114,10 +126,18 @@ export default function SignUpPage() {
           <h2 className="animate-in mb-8 text-center text-3xl font-extrabold text-primary-dark">
             Sign Up
           </h2>
-          <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+          <form
+            onSubmit={handleSubmit(onSubmit, () => {
+              toast.error("Please correct the form errors before submitting.");
+            })}
+            className="space-y-6"
+          >
             <button
               type="button"
               className="flex w-full items-center justify-center gap-2 rounded-lg border border-gray-300 bg-white px-4 py-3 font-medium text-gray-700 shadow-md transition duration-200 ease-in-out hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+              onClick={() =>
+                toast.error("Google sign-up is not implemented yet.")
+              }
             >
               <svg
                 className="mr-3 size-5 min-h-[20px] min-w-[20px]"

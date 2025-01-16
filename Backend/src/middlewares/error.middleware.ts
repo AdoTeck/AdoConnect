@@ -8,7 +8,12 @@ export const errorMiddleware = (
   res: Response,
   next: NextFunction,
 ) => {
-  logger.error(err);
+  logger.error({
+    message: err.message,
+    stack: err.stack,
+    name: err.name,
+    errors: (err as any).errors, // If the error has additional details
+  });
 
   if (err instanceof CustomError) {
     if (err instanceof ValidationError) {
