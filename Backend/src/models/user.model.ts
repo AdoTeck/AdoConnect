@@ -4,6 +4,7 @@ export interface IUser extends Document {
   userName: string;
   fullName: string;
   email: string;
+  otp?: string;
   phoneNumber: string;
   password: string;
   agreeToTerms: boolean;
@@ -32,6 +33,7 @@ const userSchema = new Schema<IUser>(
       unique: true,
       match: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
     },
+    otp: { type: String },
     phoneNumber: {
       type: String,
       required: true,

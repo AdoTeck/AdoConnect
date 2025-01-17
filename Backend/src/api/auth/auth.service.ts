@@ -2,6 +2,7 @@ import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import { config } from "../../config/env";
 import { User } from "../../models/user.model";
+import { OtpService } from './otp.service';
 import { RegisterInput, LoginInput } from "./auth.interface";
 import {
   BadRequestError,
@@ -10,6 +11,15 @@ import {
 } from "../../success-engine/error";
 
 export class AuthService {
+  static async sendOTP(email: string): Promise<void> {
+    const otp = await OtpService.generateOTP(email);
+    await OtpService.sendOTPEmail(email, otp);
+  }
+
+  static async verifyOTP(email: string, otp: string): Promise<boolean> {
+    return OtpService.verifyOTP(email, otp);
+  }
+  
   static async register(input: RegisterInput) {
     try {
       const existingUser = await User.findOne({ email: input.email });

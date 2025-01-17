@@ -30,3 +30,11 @@ export const loginSchema = z.object({
   email: emailSchema,
   password: z.string().min(1, "Password is required"),
 });
+
+export const sendOTPSchema = z.object({
+  email: emailSchema,
+});
+export const verifyOTPSchema = z.object({
+  email: emailSchema,
+  otp : z.string().min(6),
+});

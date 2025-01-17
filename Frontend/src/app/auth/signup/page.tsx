@@ -70,7 +70,14 @@ export default function SignUpPage() {
 
       // Store token securely
       sessionStorage.setItem("token", token);
-      toast.success("Sign up successful! Redirecting...");
+
+      await axios.post(
+        "http://localhost:8080/api/auth/send-otp",
+        { email: user.email },
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+
+      toast.success("Sign up successful! Please check your email for OTP.");
       setTimeout(() => {
         redirect("/auth/otp");
       }, 1000);

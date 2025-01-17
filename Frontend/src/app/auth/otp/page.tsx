@@ -13,6 +13,9 @@ import {
   FaUserShield,
 } from "react-icons/fa";
 import { z } from "zod";
+import axios from "axios";
+import { toast } from "react-hot-toast";
+import { useRouter } from "next/navigation";
 
 import { OTPInput } from "@/components";
 import { useGSAPAnimation } from "@/hooks";
@@ -42,15 +45,38 @@ type OTPFormData = z.infer<typeof otpSchema>;
 export default function OTPPage() {
   const containerRef = useGSAPAnimation();
   const [isLoading, setIsLoading] = useState(false);
-  const [resendDisabled, setResendDisabled] = useState(false);
+  const [resenadDisabled, setResendDisabled] = useState(false);
   const [resendTimer, setResendTimer] = useState(30);
+  const router = useRouter();
 
   const onSubmit = async (data: OTPFormData) => {
     setIsLoading(true);
-    console.log("OTP verification attempt with:", data);
-    // Simulate API call
-    await new Promise((resolve) => setTimeout(resolve, 2000));
-    setIsLoading(false);
+    try {
+      const token = sessionStorage.getItem("token");
+      if (!token) {
+        throw new Error("No authentication token found");
+      }
+
+      const response = await axios.post(
+        "http://localhost:8080/api/auth/verify-otp",
+        { otp: data.otp },
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+
+      toast.success("OTP verified successfully!");
+      // Redirect to dashboard or home page
+      router.push("/dashboard");
+    } catch (error) {
+      console.error("OTP verification error:", error);
+      if (axios.isAxiosError(error)) {
+        const errorMessage = error.response?.data?.message || "OTP verification failed";
+        toast.error(errorMessage);
+      } else {
+        toast.error("An unexpected error occurred. Please try again.");
+      }
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const {
@@ -77,7 +103,7 @@ export default function OTPPage() {
 
   useEffect(() => {
     let interval: NodeJS.Timeout;
-    if (resendDisabled && resendTimer > 0) {
+    if (resenadDisabled && resendTimer > 0) {
       interval = setInterval(() => {
         setResendTimer((prevTimer) => prevTimer - 1);
       }, 1000);
@@ -86,12 +112,27 @@ export default function OTPPage() {
       setResendTimer(30);
     }
     return () => clearInterval(interval);
-  }, [resendDisabled, resendTimer]);
+  }, [resenadDisabled, resendTimer]);
 
-  const handleResendOTP = () => {
+  const handleResendOTP = async () => {
     setResendDisabled(true);
-    // Add logic to resend OTP here
-    console.log("Resending OTP...");
+    try {
+      const token = sessionStorage.getItem("token");
+      if (!token) {
+        throw new Error("No authentication token found");
+      }
+
+      await axios.post(
+        "http://localhost:8080/api/auth/resend-otp",
+        {},
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+
+      toast.success("OTP resent successfully!");
+    } catch (error) {
+      console.error("Resend OTP error:", error);
+      toast.error("Failed to resend OTP. Please try again.");
+    }
   };
 
   return (
@@ -183,14 +224,14 @@ export default function OTPPage() {
           <div className="animate-in mt-6 text-center">
             <button
               onClick={handleResendOTP}
-              disabled={resendDisabled}
+              disabled={resenadDisabled}
               className={`text-sm font-medium ${
-                resendDisabled
+                resenadDisabled
                   ? "cursor-not-allowed text-gray-400"
                   : "text-[#6D28D9] transition-colors hover:text-primary-dark"
               }`}
             >
-              {resendDisabled
+              {resenadDisabled
                 ? `Resend OTP in ${resendTimer}s`
                 : "Didn't receive the OTP? Resend"}
             </button>
@@ -209,3 +250,4 @@ export default function OTPPage() {
     </div>
   );
 }
+
