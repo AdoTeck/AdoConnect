@@ -53,19 +53,24 @@ export default function OTPPage() {
     setIsLoading(true);
     try {
       const token = sessionStorage.getItem("token");
-      if (!token) {
-        throw new Error("No authentication token found");
+      const email = sessionStorage.getItem("email");
+      console.log("token", token);
+      console.log("email", email);
+      if (!token || !email) {
+        toast.error("No authentication token or email found.");
+        throw new Error("No authentication token or email found");
+        
       }
 
       const response = await axios.post(
         "http://localhost:8080/api/auth/verify-otp",
-        { otp: data.otp },
+        { otp: data.otp, email: email },
         { headers: { Authorization: `Bearer ${token}` } }
       );
 
       toast.success("OTP verified successfully!");
       // Redirect to dashboard or home page
-      router.push("/dashboard");
+      router.push("/auth/login");
     } catch (error) {
       console.error("OTP verification error:", error);
       if (axios.isAxiosError(error)) {

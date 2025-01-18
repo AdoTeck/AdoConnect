@@ -70,6 +70,7 @@ export default function SignUpPage() {
 
       // Store token securely
       sessionStorage.setItem("token", token);
+      sessionStorage.setItem("email", user.email);
 
       await axios.post(
         "http://localhost:8080/api/auth/send-otp",

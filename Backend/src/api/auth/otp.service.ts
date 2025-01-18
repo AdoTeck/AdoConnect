@@ -4,8 +4,8 @@ import { UserRepository } from '../../repositories/user.repository';
 
 export class OtpService {
   
-    static async generateOTP(email: string): Promise<string> {
-    const otp = otpGenerator.generate(6, { 
+static async generateOTP(email: string): Promise<string> {
+  const otp = otpGenerator.generate(6, { 
   digits: true, 
   upperCaseAlphabets: false, 
   lowerCaseAlphabets: false, 
