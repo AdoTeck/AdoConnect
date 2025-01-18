@@ -75,7 +75,7 @@ export default function SignUpPage() {
       await axios.post(
         "http://localhost:8080/api/auth/send-otp",
         { email: user.email },
-        { headers: { Authorization: `Bearer ${token}` } }
+        { headers: { Authorization: `Bearer ${token}` } },
       );
 
       toast.success("Sign up successful! Please check your email for OTP.");

@@ -5,14 +5,10 @@ import { registerSchema,sendOTPSchema,verifyOTPSchema ,loginSchema } from "./aut
 
 const router = Router();
 
-router.post(
-  "/signup",
-  validationMiddleware(registerSchema),
-  AuthController.register,
-);
+router.post("/signup", validationMiddleware(registerSchema), AuthController.register);
 router.get("/signup");
-router.post('/send-otp', validationMiddleware(sendOTPSchema), AuthController.sendOTP.bind(AuthController));
-router.post('/verify-otp', validationMiddleware(verifyOTPSchema), AuthController.verifyOTP.bind(AuthController));
-// router.post('/login', validationMiddleware(loginSchema), AuthController.login);
+router.post('/send-otp', validationMiddleware(sendOTPSchema), AuthController.sendOTP);
+router.post('/verify-otp', validationMiddleware(verifyOTPSchema), AuthController.verifyOTP);
+router.post('/login', validationMiddleware(loginSchema), AuthController.login);
 
 export const authRoutes = router;

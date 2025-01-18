@@ -59,13 +59,12 @@ export default function OTPPage() {
       if (!token || !email) {
         toast.error("No authentication token or email found.");
         throw new Error("No authentication token or email found");
-        
       }
 
       const response = await axios.post(
         "http://localhost:8080/api/auth/verify-otp",
         { otp: data.otp, email: email },
-        { headers: { Authorization: `Bearer ${token}` } }
+        { headers: { Authorization: `Bearer ${token}` } },
       );
 
       toast.success("OTP verified successfully!");
@@ -74,7 +73,8 @@ export default function OTPPage() {
     } catch (error) {
       console.error("OTP verification error:", error);
       if (axios.isAxiosError(error)) {
-        const errorMessage = error.response?.data?.message || "OTP verification failed";
+        const errorMessage =
+          error.response?.data?.message || "OTP verification failed";
         toast.error(errorMessage);
       } else {
         toast.error("An unexpected error occurred. Please try again.");
@@ -130,7 +130,7 @@ export default function OTPPage() {
       await axios.post(
         "http://localhost:8080/api/auth/resend-otp",
         {},
-        { headers: { Authorization: `Bearer ${token}` } }
+        { headers: { Authorization: `Bearer ${token}` } },
       );
 
       toast.success("OTP resent successfully!");
@@ -255,4 +255,3 @@ export default function OTPPage() {
     </div>
   );
 }
-

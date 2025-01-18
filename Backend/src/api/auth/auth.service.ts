@@ -57,22 +57,22 @@ export class AuthService {
     }
   }
 
-  // static async login(input: LoginInput) {
-  //   const user = await User.findOne({ email: input.email });
-  //   if (!user) {
-  //     throw new UnauthorizedError('Invalid email or password');
-  //   }
+  static async login(input: LoginInput) {
+    const user = await User.findOne({ email: input.email });
+    if (!user) {
+      throw new UnauthorizedError('User not found');
+    }
 
-  //   const isPasswordValid = await bcrypt.compare(input.password, user.password);
-  //   if (!isPasswordValid) {
-  //     throw new UnauthorizedError('Invalid email or password');
-  //   }
+    const isPasswordValid = await bcrypt.compare(input.password, user.password);
+    if (!isPasswordValid) {
+      throw new UnauthorizedError('Invalid password');
+    }
 
-  //   try {
-  //     const token = jwt.sign({ userId: user._id }, config.JWT_SECRET, { expiresIn: '1d' });
-  //     return { user: { id: user._id, email: user.email, name: user.name }, token };
-  //   } catch (error) {
-  //     throw new InternalServerError('Failed to generate token');
-  //   }
-  // }
+    try {
+      const token = jwt.sign({ userId: user._id }, config.JWT_SECRET, { expiresIn: '1d' });
+      return { user: { id: user._id, email: user.email, name: user.userName }, token };
+    } catch (error) {
+      throw new InternalServerError('Failed to generate token');
+    }
+  }
 }

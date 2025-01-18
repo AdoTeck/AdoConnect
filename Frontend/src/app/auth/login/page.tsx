@@ -4,6 +4,9 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import gsap from "gsap";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
+import { useRouter } from "next/navigation";
+import toast, { Toaster } from "react-hot-toast";
+import axios from 'axios';
 import {
   FaBookReader,
   FaCode,
@@ -34,14 +37,39 @@ const FeatureItem = ({
 export default function LoginPage() {
   const containerRef = useGSAPAnimation();
   const [isLoading, setIsLoading] = useState(false);
+  const router = useRouter();
   type LoginFormData = z.infer<typeof loginSchema>;
 
   const onSubmit = async (data: LoginFormData) => {
     setIsLoading(true);
-    console.log("Login attempt with:", data);
-    // Simulate API call
-    await new Promise((resolve) => setTimeout(resolve, 2000));
-    setIsLoading(false);
+    try {
+      const response = await axios.post(
+        "http://localhost:8080/api/auth/login",
+        data,
+      );
+      const { token, user } = response.data;
+
+      // Store token securely
+      sessionStorage.setItem("token", token);
+
+      // Store user data (you might want to store only non-sensitive info)
+      sessionStorage.setItem("user", JSON.stringify(user));
+
+      toast.success("Login successful!");
+
+      // Redirect to dashboard or home page
+      router.push("/dashboard");
+    } catch (error) {
+      console.error("Login error:", error);
+      if (axios.isAxiosError(error)) {
+        const errorMessage = error.response?.data?.message || "Login failed";
+        toast.error(errorMessage);
+      } else {
+        toast.error("An unexpected error occurred. Please try again.");
+      }
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const {
@@ -70,6 +98,7 @@ export default function LoginPage() {
 
   return (
     <div className="relative flex min-h-screen items-center justify-center overflow-hidden bg-gradient-to-r from-primary-light to-secondary-light px-4">
+     <Toaster position="top-center" reverseOrder={false} />
       <div
         className="relative flex w-full max-w-5xl overflow-hidden rounded-2xl bg-white shadow-2xl"
         ref={containerRef}
