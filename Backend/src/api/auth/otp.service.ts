@@ -1,16 +1,15 @@
-import otpGenerator from 'otp-generator';
-import nodemailer from 'nodemailer';
-import { UserRepository } from '../../repositories/user.repository';
+import otpGenerator from "otp-generator";
+import nodemailer from "nodemailer";
+import { UserRepository } from "../../repositories/user.repository";
 
 export class OtpService {
-  
-static async generateOTP(email: string): Promise<string> {
-  const otp = otpGenerator.generate(6, { 
-  digits: true, 
-  upperCaseAlphabets: false, 
-  lowerCaseAlphabets: false, 
-  specialChars: false 
-});
+  static async generateOTP(email: string): Promise<string> {
+    const otp = otpGenerator.generate(6, {
+      digits: true,
+      upperCaseAlphabets: false,
+      lowerCaseAlphabets: false,
+      specialChars: false,
+    });
     await UserRepository.updateOTP(email, otp);
     return otp;
   }
@@ -24,10 +23,23 @@ static async generateOTP(email: string): Promise<string> {
     return false;
   }
 
+  static async resendOTP(email: string): Promise<void> {
+    try {
+      // Generate a new OTP
+      const newOTP = await this.generateOTP(email);
+
+      // Send the new OTP via email
+      await this.sendOTPEmail(email, newOTP);
+    } catch (error) {
+      console.error("Error resending OTP:", error);
+      throw new Error("Failed to resend OTP");
+    }
+  }
+
   static async sendOTPEmail(email: string, otp: string): Promise<void> {
     const transporter = nodemailer.createTransport({
       // Configure your email service here
-      host: 'smtp.gmail.com',
+      host: "smtp.gmail.com",
       port: 587,
       secure: false,
       auth: {
@@ -39,7 +51,7 @@ static async generateOTP(email: string): Promise<string> {
     await transporter.sendMail({
       from: process.env.AUTH_EMAIL,
       to: email,
-      subject: 'Your OTP for verification',
+      subject: "Your OTP for verification",
       text: `Your OTP is: ${otp}`,
       html: `<b>Your OTP is: ${otp}</b>`,
     });

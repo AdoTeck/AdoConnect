@@ -7,7 +7,13 @@ export const useGSAPAnimation = () => {
   useEffect(() => {
     if (containerRef.current) {
       const tl = gsap.timeline();
-
+      gsap.from(containerRef.current.children, {
+        opacity: 0,
+        y: 50,
+        stagger: 0.2,
+        duration: 0.8,
+        ease: "power3.out",
+      });
       // Animate the container
       tl.from(containerRef.current, {
         opacity: 0,

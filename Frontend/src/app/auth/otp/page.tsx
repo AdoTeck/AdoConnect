@@ -121,18 +121,19 @@ export default function OTPPage() {
 
   const handleResendOTP = async () => {
     setResendDisabled(true);
+
     try {
       const token = sessionStorage.getItem("token");
+      const email = sessionStorage.getItem("email");
       if (!token) {
         throw new Error("No authentication token found");
       }
 
       await axios.post(
         "http://localhost:8080/api/auth/resend-otp",
-        {},
+        { email: email },
         { headers: { Authorization: `Bearer ${token}` } },
       );
-
       toast.success("OTP resent successfully!");
     } catch (error) {
       console.error("Resend OTP error:", error);

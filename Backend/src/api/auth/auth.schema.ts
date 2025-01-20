@@ -34,7 +34,11 @@ export const loginSchema = z.object({
 export const sendOTPSchema = z.object({
   email: emailSchema,
 });
+
+export const resendOTPSchema = z.object({
+  email: emailSchema,
+});
 export const verifyOTPSchema = z.object({
   email: emailSchema,
-  otp : z.string().min(6),
+  otp: z.string().min(6),
 });

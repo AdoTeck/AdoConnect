@@ -14,6 +14,7 @@
     "@hookform/resolvers": "^3.9.1",
     "axios": "^1.7.9",
     "gsap": "^3.12.5",
+    "lucide-react": "^0.473.0",
     "next": "15.1.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",

@@ -6,7 +6,7 @@ import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useRouter } from "next/navigation";
 import toast, { Toaster } from "react-hot-toast";
-import axios from 'axios';
+import axios from "axios";
 import {
   FaBookReader,
   FaCode,
@@ -98,7 +98,7 @@ export default function LoginPage() {
 
   return (
     <div className="relative flex min-h-screen items-center justify-center overflow-hidden bg-gradient-to-r from-primary-light to-secondary-light px-4">
-     <Toaster position="top-center" reverseOrder={false} />
+      <Toaster position="top-center" reverseOrder={false} />
       <div
         className="relative flex w-full max-w-5xl overflow-hidden rounded-2xl bg-white shadow-2xl"
         ref={containerRef}

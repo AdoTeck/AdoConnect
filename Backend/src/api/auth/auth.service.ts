@@ -2,7 +2,7 @@ import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import { config } from "../../config/env";
 import { User } from "../../models/user.model";
-import { OtpService } from './otp.service';
+import { OtpService } from "./otp.service";
 import { RegisterInput, LoginInput } from "./auth.interface";
 import {
   BadRequestError,
@@ -15,19 +15,20 @@ export class AuthService {
     const otp = await OtpService.generateOTP(email);
     await OtpService.sendOTPEmail(email, otp);
   }
-
+  static async resendOTP(email: string): Promise<void> {
+    await OtpService.resendOTP(email);
+  }
   static async verifyOTP(email: string, otp: string): Promise<boolean> {
     return OtpService.verifyOTP(email, otp);
   }
-  
+
   static async register(input: RegisterInput) {
     try {
       const existingUser = await User.findOne({ email: input.email });
-    if (existingUser) {
-      throw new BadRequestError("Email already in use");
-    }
+      if (existingUser) {
+        throw new BadRequestError("Email already in use");
+      }
 
-    
       const hashedPassword = await bcrypt.hash(input.password, 10);
       const user = new User({
         userName: input.userName,
@@ -60,19 +61,24 @@ export class AuthService {
   static async login(input: LoginInput) {
     const user = await User.findOne({ email: input.email });
     if (!user) {
-      throw new UnauthorizedError('User not found');
+      throw new UnauthorizedError("User not found");
     }
 
     const isPasswordValid = await bcrypt.compare(input.password, user.password);
     if (!isPasswordValid) {
-      throw new UnauthorizedError('Invalid password');
+      throw new UnauthorizedError("Invalid password");
     }
 
     try {
-      const token = jwt.sign({ userId: user._id }, config.JWT_SECRET, { expiresIn: '1d' });
-      return { user: { id: user._id, email: user.email, name: user.userName }, token };
+      const token = jwt.sign({ userId: user._id }, config.JWT_SECRET, {
+        expiresIn: "1d",
+      });
+      return {
+        user: { id: user._id, email: user.email, name: user.userName },
+        token,
+      };
     } catch (error) {
-      throw new InternalServerError('Failed to generate token');
+      throw new InternalServerError("Failed to generate token");
     }
   }
 }
