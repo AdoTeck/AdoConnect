@@ -34,6 +34,27 @@ export class AuthController {
     }
   }
 
+  static async forgetPassword(req: Request, res: Response): Promise<void> {
+    try {
+      const { email } = req.body
+      await AuthService.forgetPassword(email)
+      res.status(200).json({ message: "Password reset link sent to your email" })
+    } catch (error) {
+      console.error("Forgot password error:", error)
+      res.status(500).json({message : "An error occurred" })
+    }
+  }
+  static async resetPassword(req: Request, res: Response): Promise<void> {
+    try {
+      const { token, newPassword } = req.body
+      await AuthService.resetPassword(token, newPassword)
+      res.status(200).json({ message: "Password reset successful" })
+    } catch (error) {
+      console.error("Reset password error:", error)
+      res.status(500).json({ message:"An error occurred" })
+    }
+  }
+
   static async login(req: Request, res: Response) {
     const result = await AuthService.login(req.body);
     successResponse(res, result, "User logged in successfully");

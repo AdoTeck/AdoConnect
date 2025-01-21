@@ -1,13 +1,15 @@
-import mongoose, { Document, Schema } from "mongoose";
+import mongoose, { type Document, Schema } from "mongoose"
 
 export interface IUser extends Document {
-  userName: string;
-  fullName: string;
-  email: string;
-  otp?: string;
-  phoneNumber: string;
-  password: string;
-  agreeToTerms: boolean;
+  userName: string
+  fullName: string
+  email: string
+  otp?: string
+  phoneNumber: string
+  password: string
+  agreeToTerms: boolean
+  resetPasswordToken?: string
+  resetPasswordExpires?: Date
 }
 
 const userSchema = new Schema<IUser>(
@@ -33,7 +35,10 @@ const userSchema = new Schema<IUser>(
       unique: true,
       match: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
     },
-    otp: { type: String },
+    otp: {
+      type: String,
+      required: false,
+    },
     phoneNumber: {
       type: String,
       required: true,
@@ -49,10 +54,19 @@ const userSchema = new Schema<IUser>(
       type: Boolean,
       required: true,
     },
+    resetPasswordToken: {
+      type: String,
+      required: false,
+    },
+    resetPasswordExpires: {
+      type: Date,
+      required: false,
+    },
   },
   {
     timestamps: true,
   },
-);
+)
 
-export const User = mongoose.model<IUser>("User", userSchema);
+export const User = mongoose.model<IUser>("User", userSchema)
+

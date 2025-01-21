@@ -23,6 +23,8 @@ export class BadRequestError extends CustomError {
   }
 }
 
+
+
 export class ValidationError extends CustomError {
   constructor(errors: any) {
     super(400, "Validation Error", "VALIDATION_ERROR", errors);

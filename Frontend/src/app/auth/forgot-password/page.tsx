@@ -4,6 +4,9 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
+import axios from "axios";
+import { useRouter } from "next/navigation";
+import toast, { Toaster } from "react-hot-toast";
 
 import { FormField } from "@/components";
 import { useGSAPAnimation } from "@/hooks";
@@ -17,13 +20,22 @@ type ForgotPasswordFormData = z.infer<typeof forgotPasswordSchema>;
 export default function ForgotPasswordPage() {
   const containerRef = useGSAPAnimation();
   const [isLoading, setIsLoading] = useState(false);
+  const router = useRouter();
 
   const onSubmit = async (data: ForgotPasswordFormData) => {
     setIsLoading(true);
-    console.log("Forgot password attempt with:", data);
-    // Simulate API call
-    await new Promise((resolve) => setTimeout(resolve, 2000));
-    setIsLoading(false);
+    try {
+      await axios.post("http://localhost:8080/api/auth/forgot-password", {
+        email: data.email,
+      });
+      toast.success("Password reset link sent to your email");
+      router.push("/auth/login");
+    } catch (error) {
+      console.error("Error sending reset link:", error);
+      toast.error("Failed to send reset link");
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const {
@@ -39,6 +51,7 @@ export default function ForgotPasswordPage() {
 
   return (
     <div className="relative flex min-h-screen items-center justify-center overflow-hidden bg-gradient-to-r from-primary-light to-secondary-light px-4">
+      <Toaster position="top-center" />
       <div
         className="relative w-full max-w-md overflow-hidden rounded-2xl bg-white shadow-2xl"
         ref={containerRef}

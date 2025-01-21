@@ -4,7 +4,9 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-
+import { useRouter } from "next/navigation";
+import axios from "axios";
+import toast, { Toaster } from "react-hot-toast";
 import { FormField } from "@/components";
 import { useGSAPAnimation } from "@/hooks";
 
@@ -23,13 +25,24 @@ type ResetPasswordFormData = z.infer<typeof resetPasswordSchema>;
 export default function ResetPasswordPage() {
   const containerRef = useGSAPAnimation();
   const [isLoading, setIsLoading] = useState(false);
+  const router = useRouter();
+  const { token } = router.query;
 
   const onSubmit = async (data: ResetPasswordFormData) => {
     setIsLoading(true);
-    console.log("Reset password attempt with:", data);
-    // Simulate API call
-    await new Promise((resolve) => setTimeout(resolve, 2000));
-    setIsLoading(false);
+    try {
+      await axios.post("http://localhost:8080/api/auth/reset-password", {
+        token,
+        newPassword: data.password,
+      });
+      toast.success("Password reset successful");
+      router.push("/auth/login");
+    } catch (error) {
+      console.error("Error resetting password:", error);
+      toast.error("Failed to reset password");
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const {
@@ -46,6 +59,7 @@ export default function ResetPasswordPage() {
 
   return (
     <div className="relative flex min-h-screen items-center justify-center overflow-hidden bg-gradient-to-r from-primary-light to-secondary-light px-4">
+      <Toaster position="top-center" />
       <div
         className="relative w-full max-w-md overflow-hidden rounded-2xl bg-white shadow-2xl"
         ref={containerRef}

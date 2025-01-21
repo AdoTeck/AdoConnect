@@ -7,6 +7,8 @@ import {
   verifyOTPSchema,
   loginSchema,
   resendOTPSchema,
+  forgetPasswordSchema, 
+  resetPasswordSchema 
 } from "./auth.schema";
 
 const router = Router();
@@ -32,6 +34,11 @@ router.post(
   validationMiddleware(verifyOTPSchema),
   AuthController.verifyOTP,
 );
+
+router.post("/forgot-password", validationMiddleware(forgetPasswordSchema), AuthController.forgetPassword)
+router.post("/reset-password", validationMiddleware(resetPasswordSchema), AuthController.resetPassword)
+
 router.post("/login", validationMiddleware(loginSchema), AuthController.login);
+
 
 export const authRoutes = router;
